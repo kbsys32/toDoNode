@@ -32,12 +32,12 @@ var app = http.createServer(function (request, response) {
         } else {
 
             db.query(`SELECT *
-                      FROM kbsus32.toDo`, function (error, toDos) {
+                      FROM toDo`, function (error, toDos) {
                 if (error) {
                     throw error;
                 }
                 db.query(`SELECT *
-                          FROM kbsus32.toDo
+                          FROM toDo
                                    LEFT JOIN importance ON toDo.importance = importance.id
                           WHERE toDo.id = ?`, [queryData.id], function (error2, toDo) {
                     if (error2) {
@@ -63,7 +63,7 @@ var app = http.createServer(function (request, response) {
         }
     } else if (pathname === '/create') {
         db.query(`SELECT *
-                  FROM kbsus32.toDo`, function (error, toDos) {
+                  FROM toDo`, function (error, toDos) {
             db.query(`SELECT *
                       FROM importance`, function (error2, importance) {
                 console.log(importance);
@@ -94,7 +94,7 @@ var app = http.createServer(function (request, response) {
         });
         request.on('end', function () {
             var post = qs.parse(body);
-            db.query(`INSERT INTO kbsus32.toDo (title, description, created, importance)
+            db.query(`INSERT INTO toDo (title, description, created, importance)
                       VALUES (?, ?, NOW(), ?)`, [post.title, post.description, post.importance], function (error, result) {
                 if (error) {
                     throw error;
@@ -110,7 +110,7 @@ var app = http.createServer(function (request, response) {
                 throw error;
             }
             db.query(`SELECT *
-                      FROM kbsus32.toDo
+                      FROM toDo
                       WHERE id = ?`, (queryData.id), function (error2, toDo) {
                 if (error2) {
                     throw error2;
@@ -146,7 +146,7 @@ var app = http.createServer(function (request, response) {
         });
         request.on('end', function () {
             var post = qs.parse(body);
-            db.query(`UPDATE kbsus32.toDo
+            db.query(`UPDATE toDo
                       SET title=?,
                           description=?,
                           importance=?
@@ -165,7 +165,7 @@ var app = http.createServer(function (request, response) {
             var id = post.id;
             var filteredId = path.parse(id).base;
             db.query(`DELETE
-                      FROM kbsus32.toDo
+                      FROM toDo
                       WHERE id = ?`, [post.id], function (error, result) {
                 if (error) {
                     throw error;
